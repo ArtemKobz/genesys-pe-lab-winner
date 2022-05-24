@@ -1,0 +1,86 @@
+apiVersion: v1 
+kind: Service 
+metadata: 
+  name: headless-voice-config 
+  namespace: voice 
+  labels: 
+    servicename: voice-config 
+spec: 
+  # clusterIP: None 
+  # clusterIPs: 
+  # - None 
+  type: ClusterIP 
+  ports: 
+  - port: 9100 
+  selector: 
+    servicename: voice-config 
+--- 
+apiVersion: v1 
+kind: Service 
+metadata: 
+  name: headless-voice-rq 
+  namespace: voice 
+  labels: 
+    servicename: voice-rq 
+spec: 
+  # clusterIP: None 
+  # clusterIPs: 
+  # - None 
+  type: ClusterIP 
+  ports: 
+  - port: 12000 
+  selector: 
+    servicename: voice-rq 
+--- 
+apiVersion: v1 
+kind: Service 
+metadata: 
+  name: headless-voice-sipfe 
+  namespace: voice 
+  labels: 
+    servicename: voice-sipfe 
+spec: 
+  # clusterIP: None 
+  # clusterIPs: 
+  # - None 
+  type: ClusterIP 
+  ports: 
+  - port: 9101 
+  selector: 
+    servicename: voice-sipfe 
+--- 
+apiVersion: v1 
+kind: Service 
+metadata: 
+  name: headless-voice-sip 
+  namespace: voice 
+  labels: 
+    servicename: voice-sip 
+spec: 
+  # clusterIP: None 
+  # clusterIPs: 
+  # - None 
+  type: ClusterIP 
+  ports: 
+  - port: 11300 
+  selector: 
+    servicename: voice-sip 
+--- 
+apiVersion: v1 
+kind: Service 
+metadata: 
+  name: headless-voice-dialplan 
+  namespace: voice 
+  labels: 
+    servicename: voice-dialplan 
+spec: 
+  # clusterIP: None 
+  # clusterIPs: 
+  # - None 
+  type: ClusterIP 
+  ports: 
+  - port: 8800 
+  selector: 
+    servicename: voice-dialplan 
+--- 
+

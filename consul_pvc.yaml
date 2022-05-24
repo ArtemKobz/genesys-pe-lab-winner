@@ -1,0 +1,116 @@
+apiVersion: v1 
+kind: PersistentVolume 
+metadata: 
+  name: pv-data-consul-consul-server-0 
+  namespace: consul 
+  labels: 
+    type: local 
+spec: 
+  storageClassName: data-consul-consul-server-0 
+  capacity: 
+    storage: 10Gi 
+  accessModes: 
+    - ReadWriteOnce 
+  mountOptions: 
+    - hard 
+    - nfsvers=4.1 
+  nfs: 
+    path: /mnt/nfs_share/consul/server0 
+    server: 192.168.56.11 
+--- 
+apiVersion: v1 
+kind: PersistentVolumeClaim 
+metadata: 
+  labels: 
+    app: consul 
+    component: server 
+    hasDNS: "true" 
+    release: consul 
+  name: data-consul-consul-server-0 
+  namespace: consul 
+spec: 
+  storageClassName: data-consul-consul-server-0 
+  accessModes: 
+  - ReadWriteOnce 
+  resources: 
+    requests: 
+      storage: 10Gi 
+  volumeMode: Filesystem 
+--- 
+apiVersion: v1 
+kind: PersistentVolume 
+metadata: 
+  name: pv-data-consul-consul-server-1 
+  namespace: consul 
+  labels: 
+    type: local 
+spec: 
+  storageClassName: data-consul-consul-server-1 
+  capacity: 
+    storage: 10Gi 
+  accessModes: 
+    - ReadWriteOnce 
+  mountOptions: 
+    - hard 
+    - nfsvers=4.1 
+  nfs: 
+    path: /mnt/nfs_share/consul/server1 
+    server: 192.168.56.11 
+--- 
+apiVersion: v1 
+kind: PersistentVolumeClaim 
+metadata: 
+  labels: 
+    app: consul 
+    component: server 
+    hasDNS: "true" 
+    release: consul 
+  name: data-consul-consul-server-1 
+  namespace: consul 
+spec: 
+  storageClassName: data-consul-consul-server-1 
+  accessModes: 
+  - ReadWriteOnce 
+  resources: 
+    requests: 
+      storage: 10Gi 
+  volumeMode: Filesystem 
+--- 
+apiVersion: v1 
+kind: PersistentVolume 
+metadata: 
+  name: pv-data-consul-consul-server-2 
+  namespace: consul 
+  labels: 
+    type: local 
+spec: 
+  storageClassName: data-consul-consul-server-2 
+  capacity: 
+    storage: 10Gi 
+  accessModes: 
+    - ReadWriteOnce 
+  mountOptions: 
+    - hard 
+    - nfsvers=4.1 
+  nfs: 
+    path: /mnt/nfs_share/consul/server2 
+    server: 192.168.56.11 
+--- 
+apiVersion: v1 
+kind: PersistentVolumeClaim 
+metadata: 
+  labels: 
+    app: consul 
+    component: server 
+    hasDNS: "true" 
+    release: consul 
+  name: data-consul-consul-server-2 
+  namespace: consul 
+spec: 
+  storageClassName: data-consul-consul-server-2 
+  accessModes: 
+  - ReadWriteOnce 
+  resources: 
+    requests: 
+      storage: 10Gi 
+  volumeMode: Filesystem 

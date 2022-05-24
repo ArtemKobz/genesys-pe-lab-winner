@@ -1,0 +1,32 @@
+global: 
+  name: consul 
+  image: "hashicorp/consul:1.11.2" 
+  imageK8S: "hashicorp/consul-k8s-control-plane:0.40.0" 
+server: 
+  extraConfig: | 
+    { 
+      "enable_script_checks": true, 
+      "disable_remote_exec": false 
+    } 
+  tolerations: | 
+   - key: "node-role.kubernetes.io/master" 
+     effect: NoSchedule 
+     operator: Exists 
+connectInject: 
+  enabled: true 
+  transparentProxy: 
+    defaultEnabled: false 
+controller: 
+  enabled: true 
+syncCatalog: 
+  enabled: true 
+  toConsul: true 
+  toK8S: false 
+  addK8SNamespaceSuffix: false 
+ui: 
+  enable: true 
+  service: 
+    type: 'NodePort' 
+client: 
+  enabled: true 
+  grpc: true 

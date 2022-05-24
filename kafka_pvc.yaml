@@ -1,0 +1,77 @@
+apiVersion: v1 
+kind: PersistentVolume 
+metadata: 
+  name: pv-data-zookeeper-0 
+  namespace: postgres 
+  labels: 
+    type: local 
+spec: 
+  storageClassName: pv-data-zookeeper-0-manual 
+  capacity: 
+    storage: 10Gi 
+  accessModes: 
+    - ReadWriteOnce 
+  mountOptions: 
+    - hard 
+    - nfsvers=4.1 
+  nfs: 
+    path: /mnt/nfs_share/kafka/zookeeper0 
+    server: 192.168.56.11 
+--- 
+apiVersion: v1 
+kind: PersistentVolumeClaim 
+metadata: 
+  finalizers: 
+  - kubernetes.io/pvc-protection 
+  labels: 
+    app.kubernetes.io/component: zookeeper 
+    app.kubernetes.io/instance: zookeeper 
+    app.kubernetes.io/name: zookeeper 
+  name: data-zookeeper-0 
+  namespace: default 
+spec: 
+  storageClassName: pv-data-zookeeper-0-manual 
+  accessModes: 
+  - ReadWriteOnce 
+  resources: 
+    requests: 
+      storage: 8Gi 
+--- 
+apiVersion: v1 
+kind: PersistentVolume 
+metadata: 
+  name: pv-data-kafka-0 
+  namespace: postgres 
+  labels: 
+    type: local 
+spec: 
+  storageClassName: pv-data-kafka-0-manual 
+  capacity: 
+    storage: 10Gi 
+  accessModes: 
+    - ReadWriteOnce 
+  mountOptions: 
+    - hard 
+    - nfsvers=4.1 
+  nfs: 
+    path: /mnt/nfs_share/kafka/kafka0 
+    server: 192.168.56.11 
+--- 
+apiVersion: v1 
+kind: PersistentVolumeClaim 
+metadata: 
+  finalizers: 
+  - kubernetes.io/pvc-protection 
+  labels: 
+    app.kubernetes.io/component: kafka 
+    app.kubernetes.io/instance: kafka 
+    app.kubernetes.io/name: kafka 
+  name: data-kafka-0 
+  namespace: default 
+spec: 
+  storageClassName: pv-data-kafka-0-manual 
+  accessModes: 
+  - ReadWriteOnce 
+  resources: 
+    requests: 
+      storage: 8Gi
