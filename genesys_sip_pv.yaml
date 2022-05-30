@@ -1,0 +1,37 @@
+apiVersion: v1 
+kind: PersistentVolume 
+metadata: 
+  name:  sip-log-pv 
+spec: 
+  capacity: 
+    storage: 10Gi 
+  volumeMode: Filesystem 
+  accessModes: 
+    - ReadWriteMany 
+  persistentVolumeReclaimPolicy: Recycle 
+  storageClassName: voice-sip-log-pv 
+  mountOptions: 
+    - hard 
+    - nfsvers=4.1 
+  nfs: 
+    path: /mnt/nfs_share/genesys/voice/siplog 
+    server: 192.168.56.11 
+--- 
+apiVersion: v1 
+kind: PersistentVolume 
+metadata: 
+  name:  sip-json-log-pv 
+spec: 
+  capacity: 
+    storage: 10Gi 
+  volumeMode: Filesystem 
+  accessModes: 
+    - ReadWriteMany 
+  persistentVolumeReclaimPolicy: Recycle 
+  storageClassName: voice-sip-json-log-pv 
+  mountOptions: 
+    - hard 
+    - nfsvers=4.1 
+  nfs: 
+    path: /mnt/nfs_share/genesys/voice/sipjsonlog 
+    server: 192.168.56.11 

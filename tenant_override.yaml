@@ -1,0 +1,252 @@
+tenantid: fe30064d-70a3-40bb-a43a-96a4495982c0
+
+serviceAccount: 
+  create: true 
+ 
+serviceDiscovery: 
+  globalOption: "consul" 
+  serviceMesh : "consul" 
+ 
+images: 
+ 
+  imagePullSecrets: genesys-jfrog 
+  registry: pureengage-docker-staging.jfrog.io 
+  pullPolicy: IfNotPresent 
+  fbregistry: fluent/fluent-bit 
+  tenant: 
+    # tag         - Image version 
+    # repository  - Image repository path 
+    repository: genesys/katana/tenant_node 
+    tag: 100.0.1000041 
+  pgdbInit: 
+    enable: "true" 
+    name: tenant-pgdb-init 
+    repository: genesys/katana/tenant_pgdb_init 
+    tag: 100.0.1000037 
+    retry: 5 
+    nodeSelector: {} 
+ 
+# Tenant,tenant-pgdb-init,tenant-rcs-init & tenant-pulse-init container related changes 
+tenant: 
+  deployment: 
+    type: statefulset 
+    replicaCount: 1 
+    nameOverride: 
+    serviceGroup: tenant 
+    hookDeploy: 
+      skipCleanupAfterCompletion: "false" 
+      ttlSecondsAfterFinished: 0 
+    hookTest: 
+      testEnv: unit_test 
+      ttlSecondsAfterFinished: 120 
+      skipCleanupAfterCompletion: "false" 
+      retryCount: 90 
+      readinessTimeout: 10000 
+      defaultScriptTimeout: 1200000 
+ 
+ 
+  ## Kubernetes service resource for tenant PODs 
+  service: 
+ 
+    enable: "true" 
+    endpoints: 
+      tserver: 8000 
+      cfglib: 8888 
+      ss: 2060 
+      ocs: 5060 
+    type: NodePort 
+    confservPort: 8888 
+    hcPort: 15000 
+    tserverPort: 8000 
+    ocsPort: 5050 
+    statPort: 2060 
+    fbContainerPort: 2020 
+ 
+  general: 
+ 
+    buildIndex: 0 # --> buildIndex 
+    upstreamServices: "voice-sipfe:9101,voice-config:9100" 
+    location: "" 
+    environment: "" 
+    customerName: "GenesysLab" 
+    skipMonitor: "false" 
+    skipCsParser: "false" 
+    sipRdncyLocations: "" 
+    sipDomain: "sip:contoso.com" 
+    clusterEnvironment: "PE" 
+    removeTestConfig: "false" 
+    randomHash: "string" 
+ 
+  # PGDB Information and its related options 
+  pgdb: 
+ 
+    dbhost: "/opt/genesys/dbserver/dbserver" 
+    dbuser: "/opt/genesys/dbuser/dbuser" 
+    dbname: "/opt/genesys/dbname/dbname" 
+    sslmode: "disable" 
+ 
+ 
+  # Connect to CS using CME account 
+  cmeAccount: 
+    # user : username for connecting to CS 
+    user: "default" 
+ 
+  # Consule related options 
+  consul: 
+ 
+    useDeploymentdc: "false" # useDeploymentdc 
+    httpPort: 8500 
+    secure: false 
+    masterdc: "" 
+    homedc: "" 
+    datacenters: "dc1" 
+    healthCheck: 
+      enable: "true" 
+      endpoint: "/tenant/health" 
+      interval: "10s" 
+      timeout: "5s" 
+      deregTimeout: "2m" 
+  # Redis Server information for configcache and tenant stream data 
+  redis: 
+    enable: "true" 
+    port: 6379 
+    isCluster: false 
+  # 
+  kafka: 
+    enable: "true" # Pass kafka secrets to POD as ENV by setting as true 
+ 
+  # GWS Information to register tenant information 
+  gws: 
+ 
+    enable: "false" 
+    tls: false 
+    authEndpoint: "gauth-auth.gauth.svc.cluster.local" 
+    envEndpoint: "" 
+    db: 
+      enable: "false" 
+      read: "false" 
+      init: "false" 
+ 
+  # External Authentication support via LDAP Server 
+  ldapServer: 
+ 
+    enable: "false" 
+    appUser: "" 
+    ldapUrl: "" 
+    enableTenantLevelAccess: "false" 
+ 
+ 
+  secrets: 
+    # PGDB Secret Information and its related options 
+    pgdb: 
+      pwd: 
+        secretName: "/opt/genesys/dbpassword/dbpassword" 
+        secretKey: "dbpassword" 
+      volumes: | 
+        - name: dbpassword 
+          secret: 
+            secretName: dbpassword 
+        - name: dbserver 
+          secret: 
+            secretName: dbserver 
+        - name: dbname 
+          secret: 
+            secretName: dbname 
+        - name: dbuser 
+          secret: 
+            secretName: dbuser 
+      mounts: 
+        - name: dbpassword 
+          readOnly: true 
+          mountPath: "/opt/genesys/dbpassword" 
+        - name: dbserver 
+          readOnly: true 
+          mountPath: "/opt/genesys/dbserver" 
+        - name: dbname 
+          readOnly: true 
+          mountPath: "/opt/genesys/dbname" 
+        - name: dbuser 
+          readOnly: true 
+          mountPath: "/opt/genesys/dbuser" 
+ 
+ 
+    # Redis server and its secrets to connect to it 
+    redis: 
+      configPwd: 
+        secretName: "/opt/genesys/redis-config-secret/redis-config-state" 
+        volumes: 
+          - name: redis-config-secret 
+            secret: 
+              secretName: redis-config-token 
+        mounts: 
+          - name: redis-config-secret 
+            readOnly: true 
+            mountPath: "/opt/genesys/redis-config-secret" 
+ 
+      streamPwd: 
+        secretName: "/opt/genesys/redis-tenant-secret/redis-tenant-stream" 
+        volumes: 
+          - name: redis-tenant-secret 
+            secret: 
+              secretName: redis-tenant-token 
+        mounts: 
+          - name: redis-tenant-secret 
+            readOnly: true 
+            mountPath: "/opt/genesys/redis-tenant-secret" 
+    kafka: 
+      pwd: 
+         secretName: "/opt/genesys/kafka-secrets/kafka-secrets" 
+      volumes: 
+        - name: kafka-secrets 
+          secret: 
+            secretName: kafka-secrets-token 
+      mounts: 
+        - name: kafka-secrets 
+          mountPath: "/opt/genesys/kafka-secrets" 
+    gws: 
+      user: 
+        secretName: "/opt/genesys/gauth-client-id/clientid" 
+      pwd: 
+        secretName: "/opt/genesys/gauth-client-token/clientsecret" 
+      volumes: 
+        - name: gauth-client-id 
+          secret: 
+            secretName: gauthclientid 
+        - name: gauth-client-token 
+          secret: 
+            secretName: gauthclientsecret 
+      mounts: 
+        - name: gauth-client-id 
+          readOnly: true 
+          mountPath: "/opt/genesys/gauth-client-id" 
+        - name: gauth-client-token 
+          readOnly: true 
+          mountPath: "/opt/genesys/gauth-client-token" 
+ 
+  resources: 
+      tenantContainer: 
+        requests: 
+          cpu: 100m 
+          memory: 128Mi 
+      initContainer: 
+        requests: 
+          cpu: 100m 
+          memory: 128Mi 
+      hookTestContainer: 
+        requests: 
+          cpu: 100m 
+          memory: 128Mi 
+ 
+  debug: 
+    mode: none 
+    bash: | 
+      command: [ "/bin/bash" ] 
+      args: [ "-c", "yum 
+      -y install  nmap-ncat && while true ; do nc -lk 15000 -c 'echo -e \"HTTP/1.1 200 OK\n\n $(date)\"'; done" ] 
+ 
+  prometheus: 
+      podMonitor: 
+        enable: "false" 
+        matchinglabels: { 
+            app.kubernetes.io/monitor-name : tenant 
+        } 

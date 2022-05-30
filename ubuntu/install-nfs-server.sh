@@ -12,6 +12,7 @@ cat >> /etc/exports <<EOF
 /mnt/nfs_share 192.168.56.2(rw,sync,no_subtree_check,no_root_squash)
 /mnt/nfs_share 192.168.56.3(rw,sync,no_subtree_check,no_root_squash)
 /mnt/nfs_share 192.168.56.4(rw,sync,no_subtree_check,no_root_squash)
+/mnt/nfs_share 192.168.56.5(rw,sync,no_subtree_check,no_root_squash)
 EOF
 
 exportfs -a
@@ -32,4 +33,13 @@ cd /mnt/nfs_share
 mkdir -p redis/master-0
 mkdir -p redis/replica-0
 chmod 777 -R redis
+
+cd /mnt/nfs_share
+mkdir -p genesys/voice/siplog
+mkdir -p genesys/voice/sipjsonlog
+chmod 777 -R genesys
+
+cd /mnt/nfs_share
+mkdir -p postgres/tenant/data
+chmod 777 -R postgres
 

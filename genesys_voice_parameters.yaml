@@ -1,0 +1,70 @@
+image: 
+  registry: pureengage-docker-staging.jfrog.io 
+  imagePullSecrets: genesys-jfrog 
+
+context: 
+  envs: 
+    # Application Configuration 
+    dnsServer: "10.96.0.10" 
+    redis: 
+      port: 6379                           # Redis Cluster port 
+      isCluster: false                       # Service will connect to Redis cluster or Redis standalone. By default we use Redis cluster. This value should not be overridden. 
+ 
+    consul: 
+      secure: false                          # Use TLS for connecting to Consul 
+      port: 8500                            # Consul listening Port 
+ 
+prometheus: 
+  podMonitor: 
+    enabled: false   # Enable for Prometheus operator 
+  mounts: 
+deployment: 
+  replicaCount: 1 
+ 
+resources: 
+  requests: 
+    cpu: "100m"                   # CPU Rquest value for container 
+    memory: "128Mi"               # Mmory Request value for container 
+  limits: 
+    cpu: "500m"                   # CPU limit value for container 
+    memory: "512Mi"               # Memory limit value for container 
+ 
+secrets: 
+ 
+ 
+ 
+  redisSipCache:                                            # Mount secret for redis-tenant-stream 
+    general: 
+      enabled: false 
+    mounts: 
+    volumes: 
+ 
+ 
+  scxmlSecret:                                            # Mount secret for redis-tenant-stream 
+    general: 
+      enabled: false 
+    mounts: 
+    volumes: 
+ 
+ 
+  kafkaDC:                                                        # Mount secret for kafka cluster 
+    general: 
+      enabled: false 
+    mounts: 
+    volumes: 
+ 
+  consulACL:                                                    # Mount secret for consul ACL 
+    general: 
+      enabled: false 
+    mounts: 
+    volumes: 
+ 
+# sip override 
+loggingSidecar: 
+  enabled: false 
+volumes: 
+  pvcLog: 
+    storageClass: voice-sip-log-pv                              # Name of PVC 
+ 
+  pvcJsonLog: 
+    storageClass: voice-sip-json-log-pv                         # Name of PVC 

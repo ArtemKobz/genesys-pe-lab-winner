@@ -1,0 +1,188 @@
+apiVersion: v1 
+kind: Service 
+metadata: 
+  name: redis-agent-state 
+  annotations: 
+    "consul.hashicorp.com/service-sync": "true" 
+spec: 
+  clusterIP: None 
+--- 
+apiVersion: v1 
+kind: Endpoints 
+metadata: 
+  name: redis-agent-state 
+subsets: 
+  - addresses: 
+      - ip: 10.96.127.184 
+    ports: 
+      - port: 6379 
+        name: redisport 
+        protocol: TCP 
+--- 
+apiVersion: v1 
+kind: Service 
+metadata: 
+  name: redis-call-state 
+  annotations: 
+    "consul.hashicorp.com/service-sync": "true" 
+spec: 
+  clusterIP: None 
+--- 
+apiVersion: v1 
+kind: Endpoints 
+metadata: 
+  name: redis-call-state 
+subsets: 
+  - addresses: 
+      - ip: 10.96.127.184 
+    ports: 
+      - port: 6379 
+        name: redisport 
+        protocol: TCP 
+--- 
+apiVersion: v1 
+kind: Service 
+metadata: 
+  name: redis-config-state 
+  annotations: 
+    "consul.hashicorp.com/service-sync": "true" 
+spec: 
+  clusterIP: None 
+--- 
+apiVersion: v1 
+kind: Endpoints 
+metadata: 
+  name: redis-config-state 
+subsets: 
+  - addresses: 
+      - ip: 10.96.127.184 
+    ports: 
+      - port: 6379 
+        name: redisport 
+        protocol: TCP 
+--- 
+apiVersion: v1 
+kind: Service 
+metadata: 
+  name: redis-ors-state 
+  annotations: 
+    "consul.hashicorp.com/service-sync": "true" 
+spec: 
+  clusterIP: None 
+--- 
+apiVersion: v1 
+kind: Endpoints 
+metadata: 
+  name: redis-ors-state 
+subsets: 
+  - addresses: 
+      - ip: 10.96.127.184 
+    ports: 
+      - port: 6379 
+        name: redisport 
+        protocol: TCP 
+--- 
+apiVersion: v1 
+kind: Service 
+metadata: 
+  name: redis-ors-stream 
+  annotations: 
+    "consul.hashicorp.com/service-sync": "true" 
+spec: 
+  clusterIP: None 
+--- 
+apiVersion: v1 
+kind: Endpoints 
+metadata: 
+  name: redis-ors-stream 
+subsets: 
+  - addresses: 
+      - ip: 10.96.127.184 
+    ports: 
+      - port: 6379 
+        name: redisport 
+        protocol: TCP 
+--- 
+apiVersion: v1 
+kind: Service 
+metadata: 
+  name: redis-registrar-state 
+  annotations: 
+    "consul.hashicorp.com/service-sync": "true" 
+spec: 
+  clusterIP: None 
+--- 
+apiVersion: v1 
+kind: Endpoints 
+metadata: 
+  name: redis-registrar-state 
+subsets: 
+  - addresses: 
+      - ip: 10.96.127.184 
+    ports: 
+      - port: 6379 
+        name: redisport 
+        protocol: TCP 
+--- 
+apiVersion: v1 
+kind: Service 
+metadata: 
+  name: redis-rq-state 
+  annotations: 
+    "consul.hashicorp.com/service-sync": "true" 
+spec: 
+  clusterIP: None 
+--- 
+apiVersion: v1 
+kind: Endpoints 
+metadata: 
+  name: redis-rq-state 
+subsets: 
+  - addresses: 
+      - ip: 10.96.127.184 
+    ports: 
+      - port: 6379 
+        name: redisport 
+        protocol: TCP 
+--- 
+apiVersion: v1 
+kind: Service 
+metadata: 
+  name: redis-sip-state 
+  annotations: 
+    "consul.hashicorp.com/service-sync": "true" 
+spec: 
+  clusterIP: None 
+--- 
+apiVersion: v1 
+kind: Endpoints 
+metadata: 
+  name: redis-sip-state 
+subsets: 
+  - addresses: 
+      - ip: 10.96.127.184 
+    ports: 
+      - port: 6379 
+        name: redisport 
+        protocol: TCP 
+--- 
+apiVersion: v1 
+kind: Service 
+metadata: 
+  name: redis-tenant-stream 
+  annotations: 
+    "consul.hashicorp.com/service-sync": "true" 
+spec: 
+  clusterIP: None 
+--- 
+apiVersion: v1 
+kind: Endpoints 
+metadata: 
+  name: redis-tenant-stream 
+subsets: 
+  - addresses: 
+      - ip: 10.96.127.184 
+    ports: 
+      - port: 6379 
+        name: redisport 
+        protocol: TCP 

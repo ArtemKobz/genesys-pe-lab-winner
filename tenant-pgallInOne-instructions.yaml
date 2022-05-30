@@ -1,0 +1,102 @@
+apiVersion: v1 
+kind: PersistentVolume 
+metadata: 
+  name: tenant-postgres-pv-volume 
+  namespace: postgres 
+  labels: 
+    type: local 
+spec: 
+  storageClassName: tenant-postgres-manual 
+  volumeMode: Filesystem 
+  capacity: 
+    storage: 5Gi 
+  accessModes: 
+    - ReadWriteOnce 
+  persistentVolumeReclaimPolicy: Recycle 
+  mountOptions: 
+    - hard 
+    - nfsvers=4.1 
+  nfs: 
+    path: /mnt/nfs_share/postgres/tenant/data 
+    server: 192.168.56.11 
+--- 
+apiVersion: v1 
+kind: PersistentVolumeClaim 
+metadata: 
+  name: tenant-postgres-pv-claim 
+  namespace: postgres 
+spec: 
+  storageClassName: tenant-postgres-manual 
+  accessModes: 
+    - ReadWriteOnce 
+  resources: 
+    requests: 
+      storage: 5Gi 
+--- 
+apiVersion: v1 
+kind: Service 
+metadata: 
+  name: tenant-postgres 
+  namespace: postgres 
+  labels: 
+    app: tenant-postgres 
+spec: 
+  type: NodePort 
+  ports: 
+  - port: 5432 
+  selector: 
+    app: tenant-postgres 
+--- 
+apiVersion: v1 
+kind: Secret 
+metadata: 
+  name: tenant-postgres-secret-config 
+  namespace: postgres 
+type: Opaque 
+data: 
+  password: dGVuYW50LXBhc3N3b3Jk 
+#tenant-password 
+--- 
+apiVersion: apps/v1 
+kind: Deployment 
+metadata: 
+  namespace: postgres 
+  creationTimestamp: null 
+  labels: 
+    app: tenant-postgres 
+  name: tenant-postgres 
+spec: 
+  replicas: 1 
+  selector: 
+    matchLabels: 
+      app: tenant-postgres 
+  strategy: {} 
+  template: 
+    metadata: 
+      creationTimestamp: null 
+      labels: 
+        app: tenant-postgres 
+    spec: 
+      volumes: 
+      - name: tenant-postgres-pv-storage 
+        persistentVolumeClaim: 
+          claimName: tenant-postgres-pv-claim 
+      containers: 
+      - image: postgres:11 
+        name: postgres 
+        imagePullPolicy: IfNotPresent 
+        resources: {} 
+        ports: 
+        - containerPort: 5432 
+        env: 
+          - name: POSTGRES_PASSWORD 
+            valueFrom: 
+              secretKeyRef: 
+                name: tenant-postgres-secret-config 
+                key: password 
+          - name: PGDATA 
+            value: /var/lib/postgresql/data/pgdata 
+        volumeMounts: 
+        - mountPath: /var/lib/postgresql/data 
+          name: tenant-postgres-pv-storage 
+status: {} 

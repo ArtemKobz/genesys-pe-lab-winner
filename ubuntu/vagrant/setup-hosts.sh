@@ -18,6 +18,7 @@ cat >> /etc/hosts <<EOF
 192.168.56.2  master kubemaster
 192.168.56.3  worker-1 kubenode01
 192.168.56.4  worker-2 kubenode02
+192.168.56.5  worker-3 kubenode03
 192.168.56.11 nfs01
 EOF
 cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
