@@ -1,5 +1,8 @@
 tenantid: fe30064d-70a3-40bb-a43a-96a4495982c0
 
+securityContext:
+      fsGroup: 0
+
 serviceAccount: 
   create: true 
  
@@ -17,12 +20,12 @@ images:
     # tag         - Image version 
     # repository  - Image repository path 
     repository: genesys/katana/tenant_node 
-    tag: 100.0.1000041 
+    tag: 100.0.1000064 
   pgdbInit: 
     enable: "true" 
     name: tenant-pgdb-init 
     repository: genesys/katana/tenant_pgdb_init 
-    tag: 100.0.1000037 
+    tag: 100.0.1000064 
     retry: 5 
     nodeSelector: {} 
  
@@ -65,7 +68,7 @@ tenant:
   general: 
  
     buildIndex: 0 # --> buildIndex 
-    upstreamServices: "voice-sipfe:9101,voice-config:9100" 
+    upstreamServices: "voice-sipfe:9101,voice-config:9100,voice-rq:12000" 
     location: "" 
     environment: "" 
     customerName: "GenesysLab" 
